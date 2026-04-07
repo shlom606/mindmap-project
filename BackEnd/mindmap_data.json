@@ -1,0 +1,591 @@
+{
+    "nodes": [
+        {
+            "id": "Artificial Intelligence",
+            "community": 0,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 0,
+            "x": -795.7416529178769,
+            "y": -407.14225598217797
+        },
+        {
+            "id": "Machine Learning",
+            "community": 0,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 0,
+            "x": -680.7663340284518,
+            "y": -455.62490983181425
+        },
+        {
+            "id": "Deep Learning",
+            "community": 0,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 0,
+            "x": -698.0193963176798,
+            "y": -323.1515895169413
+        },
+        {
+            "id": "Neural Networks",
+            "community": 0,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 0,
+            "x": -752.4840474720958,
+            "y": -492.9136252326414
+        },
+        {
+            "id": "Supervised Learning",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -627.5064218226499,
+            "y": -275.85571990438586
+        },
+        {
+            "id": "Unsupervised Learning",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -654.9296710568685,
+            "y": -181.21117073669228
+        },
+        {
+            "id": "Reinforcement Learning",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -552.6823990099618,
+            "y": -242.09867479587868
+        },
+        {
+            "id": "Gradient Descent",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -806.5479124234315,
+            "y": -194.39930463166098
+        },
+        {
+            "id": "Natural Language Processing",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -576.2543939624012,
+            "y": -175.9582991771856
+        },
+        {
+            "id": "Computer Vision",
+            "community": 0,
+            "cluster": -1,
+            "is_noise": true,
+            "group": 0,
+            "x": -839.5198278233673,
+            "y": -599.8004777666329
+        },
+        {
+            "id": "Backpropagation",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -684.7107587078809,
+            "y": -81.12370891086319
+        },
+        {
+            "id": "Overfitting",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -792.5211563460402,
+            "y": -35.44665003965585
+        },
+        {
+            "id": "Decision Trees",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -830.4427834595614,
+            "y": -280.1103775081849
+        },
+        {
+            "id": "Support Vector Machines",
+            "community": 0,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 0,
+            "x": -672.1460553769907,
+            "y": -575.4880254783175
+        },
+        {
+            "id": "Model Training",
+            "community": 2,
+            "cluster": 0,
+            "is_noise": false,
+            "group": 2,
+            "x": -573.1130739430797,
+            "y": -400.9515665808334
+        },
+        {
+            "id": "World War I",
+            "community": 3,
+            "cluster": 1,
+            "is_noise": false,
+            "group": 3,
+            "x": 954.1008017874393,
+            "y": -140.1496685731211
+        },
+        {
+            "id": "World War II",
+            "community": 3,
+            "cluster": 1,
+            "is_noise": false,
+            "group": 3,
+            "x": 914.1757278779293,
+            "y": -200.24370219167898
+        },
+        {
+            "id": "French Revolution",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 583.3770306342834,
+            "y": 371.1037803461399
+        },
+        {
+            "id": "Industrial Revolution",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 690.8771754265864,
+            "y": 297.8134785087899
+        },
+        {
+            "id": "Roman Empire",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 554.9011789750181,
+            "y": 510.8429273889464
+        },
+        {
+            "id": "Ancient Egypt",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 669.3728059943234,
+            "y": 694.3279816523582
+        },
+        {
+            "id": "Cold War",
+            "community": 3,
+            "cluster": 1,
+            "is_noise": false,
+            "group": 3,
+            "x": 999.9999999999999,
+            "y": -184.66583828989496
+        },
+        {
+            "id": "Renaissance",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 637.7488937789756,
+            "y": 433.6253075781067
+        },
+        {
+            "id": "Ottoman Empire",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 565.4803358237141,
+            "y": 675.3078815013489
+        },
+        {
+            "id": "Middle Ages",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 707.3083972938806,
+            "y": 579.3670155183124
+        },
+        {
+            "id": "American Civil War",
+            "community": 3,
+            "cluster": 1,
+            "is_noise": false,
+            "group": 3,
+            "x": 873.0949628768104,
+            "y": -58.543741580546
+        },
+        {
+            "id": "Ancient Greece",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 616.3306259956441,
+            "y": 588.4668346242338
+        },
+        {
+            "id": "Magna Carta",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 503.6644877363492,
+            "y": 564.5650559759301
+        },
+        {
+            "id": "Discovery of America",
+            "community": 1,
+            "cluster": 1,
+            "is_noise": false,
+            "group": 1,
+            "x": 759.2018179730095,
+            "y": 177.14899279808563
+        },
+        {
+            "id": "Napoleon Bonaparte",
+            "community": 1,
+            "cluster": 2,
+            "is_noise": false,
+            "group": 1,
+            "x": 507.751642494376,
+            "y": 412.31005083685636
+        }
+    ],
+    "links": [
+        {
+            "source": "Artificial Intelligence",
+            "target": "Machine Learning",
+            "value": 0.6332317
+        },
+        {
+            "source": "Artificial Intelligence",
+            "target": "Neural Networks",
+            "value": 0.5851598
+        },
+        {
+            "source": "Artificial Intelligence",
+            "target": "Deep Learning",
+            "value": 0.47171533
+        },
+        {
+            "source": "Artificial Intelligence",
+            "target": "Gradient Descent",
+            "value": 0.33016443
+        },
+        {
+            "source": "Artificial Intelligence",
+            "target": "Computer Vision",
+            "value": 0.31660074
+        },
+        {
+            "source": "Artificial Intelligence",
+            "target": "Decision Trees",
+            "value": 0.28428733
+        },
+        {
+            "source": "Machine Learning",
+            "target": "Neural Networks",
+            "value": 0.683836
+        },
+        {
+            "source": "Machine Learning",
+            "target": "Deep Learning",
+            "value": 0.64671624
+        },
+        {
+            "source": "Machine Learning",
+            "target": "Support Vector Machines",
+            "value": 0.43080246
+        },
+        {
+            "source": "Machine Learning",
+            "target": "Model Training",
+            "value": 0.5383824
+        },
+        {
+            "source": "Neural Networks",
+            "target": "Deep Learning",
+            "value": 0.5542301
+        },
+        {
+            "source": "Neural Networks",
+            "target": "Computer Vision",
+            "value": 0.29086405
+        },
+        {
+            "source": "Neural Networks",
+            "target": "Support Vector Machines",
+            "value": 0.45189512
+        },
+        {
+            "source": "Deep Learning",
+            "target": "Unsupervised Learning",
+            "value": 0.6737405
+        },
+        {
+            "source": "Deep Learning",
+            "target": "Supervised Learning",
+            "value": 0.6006446
+        },
+        {
+            "source": "Deep Learning",
+            "target": "Gradient Descent",
+            "value": 0.34589887
+        },
+        {
+            "source": "Deep Learning",
+            "target": "Natural Language Processing",
+            "value": 0.37810117
+        },
+        {
+            "source": "Unsupervised Learning",
+            "target": "Supervised Learning",
+            "value": 0.7388561
+        },
+        {
+            "source": "Unsupervised Learning",
+            "target": "Reinforcement Learning",
+            "value": 0.6388161
+        },
+        {
+            "source": "Unsupervised Learning",
+            "target": "Natural Language Processing",
+            "value": 0.3981623
+        },
+        {
+            "source": "Unsupervised Learning",
+            "target": "Backpropagation",
+            "value": 0.34050035
+        },
+        {
+            "source": "Unsupervised Learning",
+            "target": "Overfitting",
+            "value": 0.2949652
+        },
+        {
+            "source": "Supervised Learning",
+            "target": "Reinforcement Learning",
+            "value": 0.6890435
+        },
+        {
+            "source": "Supervised Learning",
+            "target": "Natural Language Processing",
+            "value": 0.4168955
+        },
+        {
+            "source": "Supervised Learning",
+            "target": "Decision Trees",
+            "value": 0.32939816
+        },
+        {
+            "source": "Supervised Learning",
+            "target": "Model Training",
+            "value": 0.5902781
+        },
+        {
+            "source": "Reinforcement Learning",
+            "target": "Model Training",
+            "value": 0.611426
+        },
+        {
+            "source": "Reinforcement Learning",
+            "target": "Backpropagation",
+            "value": 0.34468699
+        },
+        {
+            "source": "Model Training",
+            "target": "Support Vector Machines",
+            "value": 0.33633673
+        },
+        {
+            "source": "Gradient Descent",
+            "target": "Backpropagation",
+            "value": 0.32454568
+        },
+        {
+            "source": "Gradient Descent",
+            "target": "Overfitting",
+            "value": 0.29048526
+        },
+        {
+            "source": "Gradient Descent",
+            "target": "Decision Trees",
+            "value": 0.31873846
+        },
+        {
+            "source": "Backpropagation",
+            "target": "Overfitting",
+            "value": 0.2999248
+        },
+        {
+            "source": "Computer Vision",
+            "target": "Support Vector Machines",
+            "value": 0.24543554
+        },
+        {
+            "source": "World War I",
+            "target": "World War II",
+            "value": 0.94650114
+        },
+        {
+            "source": "World War I",
+            "target": "American Civil War",
+            "value": 0.5787669
+        },
+        {
+            "source": "World War I",
+            "target": "Cold War",
+            "value": 0.57128394
+        },
+        {
+            "source": "World War II",
+            "target": "Cold War",
+            "value": 0.57268065
+        },
+        {
+            "source": "World War II",
+            "target": "American Civil War",
+            "value": 0.5441958
+        },
+        {
+            "source": "American Civil War",
+            "target": "Cold War",
+            "value": 0.48997313
+        },
+        {
+            "source": "American Civil War",
+            "target": "Discovery of America",
+            "value": 0.5044053
+        },
+        {
+            "source": "French Revolution",
+            "target": "Renaissance",
+            "value": 0.65210736
+        },
+        {
+            "source": "French Revolution",
+            "target": "Napoleon Bonaparte",
+            "value": 0.6341403
+        },
+        {
+            "source": "French Revolution",
+            "target": "Roman Empire",
+            "value": 0.553794
+        },
+        {
+            "source": "French Revolution",
+            "target": "Industrial Revolution",
+            "value": 0.5238537
+        },
+        {
+            "source": "Renaissance",
+            "target": "Industrial Revolution",
+            "value": 0.46810973
+        },
+        {
+            "source": "Renaissance",
+            "target": "Roman Empire",
+            "value": 0.6806216
+        },
+        {
+            "source": "Renaissance",
+            "target": "Middle Ages",
+            "value": 0.7335298
+        },
+        {
+            "source": "Renaissance",
+            "target": "Ancient Greece",
+            "value": 0.6568166
+        },
+        {
+            "source": "Renaissance",
+            "target": "Magna Carta",
+            "value": 0.4061709
+        },
+        {
+            "source": "Renaissance",
+            "target": "Discovery of America",
+            "value": 0.43354297
+        },
+        {
+            "source": "Renaissance",
+            "target": "Napoleon Bonaparte",
+            "value": 0.47095728
+        },
+        {
+            "source": "Napoleon Bonaparte",
+            "target": "Roman Empire",
+            "value": 0.5328088
+        },
+        {
+            "source": "Roman Empire",
+            "target": "Ancient Greece",
+            "value": 0.66963565
+        },
+        {
+            "source": "Roman Empire",
+            "target": "Ottoman Empire",
+            "value": 0.57179755
+        },
+        {
+            "source": "Roman Empire",
+            "target": "Magna Carta",
+            "value": 0.487948
+        },
+        {
+            "source": "Industrial Revolution",
+            "target": "Discovery of America",
+            "value": 0.44071507
+        },
+        {
+            "source": "Ancient Greece",
+            "target": "Ancient Egypt",
+            "value": 0.6932161
+        },
+        {
+            "source": "Ancient Greece",
+            "target": "Ottoman Empire",
+            "value": 0.58416116
+        },
+        {
+            "source": "Ancient Greece",
+            "target": "Middle Ages",
+            "value": 0.62415236
+        },
+        {
+            "source": "Ancient Greece",
+            "target": "Magna Carta",
+            "value": 0.38353378
+        },
+        {
+            "source": "Ottoman Empire",
+            "target": "Ancient Egypt",
+            "value": 0.64166903
+        },
+        {
+            "source": "Ancient Egypt",
+            "target": "Middle Ages",
+            "value": 0.6977375
+        }
+    ]
+}
