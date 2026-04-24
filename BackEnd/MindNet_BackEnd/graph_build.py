@@ -16,10 +16,15 @@ class GraphBuilder:
             knn = NearestNeighbors(n_neighbors=k_neighbors + 1, metric='cosine')
             knn.fit(embeddings)
             distances, indices = knn.kneighbors(embeddings)
-            
+            # Use a threshold (Cosine distance is 0.0 to 1.0)
+            # 0.7 means "if they are more than 70% different, don't draw a line"
+            THRESHOLD = 0.7 
+
             for i in range(n_concepts):
-                for neighbor_idx in indices[i][1:]: # Skip self
-                    G.add_edge(concepts[i], concepts[neighbor_idx])
+                for j, neighbor_idx in enumerate(indices[i][1:]):
+                    dist = distances[i][j+1]
+                    if dist < THRESHOLD: # Only add edge if they are actually 'close'
+                        G.add_edge(concepts[i], concepts[neighbor_idx])
         
         # Calculate X, Y positions (The Spring Physics)
         pos = nx.spring_layout(G, k=0.15, iterations=50)
