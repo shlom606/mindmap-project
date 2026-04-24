@@ -7,29 +7,44 @@ function App() {
   const [loading, setLoading] = useState(false);
   const fgRef = useRef();
 
-  const handleGenerate = () => {
-    if (!inputText.trim()) return;
+
+const handleGenerate = async () => { // Remove 'concepts' argument here
+    // 1. Validation: Clean the input string and turn it into an array
+    const conceptArray = inputText
+      .split(',')                     // Split by comma
+      .map(c => c.trim())             // Remove spaces
+      .filter(c => c.length > 0);     // Remove empty strings
+
+    if (conceptArray.length < 2) {
+      alert("Please enter at least 2 concepts separated by commas.");
+      return;
+    }
+
     setLoading(true);
 
-    // הפיכת הטקסט לרשימה (מפרידים לפי פסיקים)
-    const concepts = inputText.split(',').map(c => c.trim()).filter(c => c !== "");
-
-    fetch('http://127.0.0.1:8000/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ concepts: concepts }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setGraphData(data);
-        setLoading(false);
-        // מיקוד המצלמה בגרף החדש
-        setTimeout(() => fgRef.current.zoomToFit(400), 500);
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        setLoading(false);
+    try {
+      // 2. The API Call
+      const response = await fetch("http://127.0.0.1:8000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // Now we stringify the CLEAN array, not the Event object
+        body: JSON.stringify({ concepts: conceptArray }), 
       });
+      
+      if (!response.ok) throw new Error("Server Error");
+      
+      const data = await response.json();
+      
+      // 3. Update State
+      setGraphData(data); 
+    } catch (error) {
+      console.error("CORS or Connection Error:", error);
+      alert("Make sure your FastAPI server is running on port 8000!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,8 +74,15 @@ function App() {
         <ForceGraph2D
           ref={fgRef}
           graphData={graphData}
-          nodeLabel={node => `${node.id} (${node.category_name})`} 
-          // nodeLabel="id"
+          nodeLabel={node => {
+            // Check if 'category' exists, otherwise fallback to the ID
+            return `
+              <div style="background: #333; color: #fff; padding: 5px; border-radius: 5px; border: 1px solid #777;">
+                <strong>Name:</strong> ${node.id}<br/>
+                <strong>Category:</strong> ${node.category || 'Unclassified'}
+              </div>
+            `;
+          }}
           nodeAutoColorBy="group"
           nodeRelSize={7}
           linkDirectionalParticles={2}

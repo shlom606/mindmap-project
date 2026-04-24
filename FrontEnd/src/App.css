@@ -1,42 +1,66 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Container for the whole application */
+.app-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f2f5;
+  overflow: hidden;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* The AI Classification Legend */
+.legend-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-width: 180px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.legend-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
 }
 
-.card {
-  padding: 2em;
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  transition: transform 0.2s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.legend-item:hover {
+  transform: translateX(5px);
+}
+
+.legend-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+}
+
+.legend-label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Style for the hover tooltip (Optional customization) */
+.scene-tooltip {
+  background: #333 !important;
+  color: white !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+  font-size: 14px !important;
 }
