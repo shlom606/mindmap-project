@@ -13,5 +13,5 @@ CATEGORY_MAP = {
 INPUT_SIZE = 384
 HIDDEN_SIZE = 128
 NUM_CLASSES = 5
-MODEL_PATH = 'mindmap_model.pth'
+MODEL_PATH = 'mindmap_model3.pth'
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
