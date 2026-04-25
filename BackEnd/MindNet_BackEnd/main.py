@@ -5,12 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from ai_engine import AIEngine
 from graph_build import GraphBuilder
 
+#The FastAPI settings to initilise the web server
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # Initialize our specialized modules
-engine = AIEngine()
-builder = GraphBuilder()
+engine = AIEngine() #this from ai_engine.py
+builder = GraphBuilder() #this is from graph_build.py
 
 class ConceptRequest(BaseModel):
     concepts: list[str]
