@@ -8,7 +8,7 @@ function App() {
   const fgRef = useRef();
 
 
-const handleGenerate = async () => { // Remove 'concepts' argument here
+const handleGenerate = async () => {
     // 1. Validation: Clean the input string and turn it into an array
     const conceptArray = inputText
       .split(',')                     // Split by comma
