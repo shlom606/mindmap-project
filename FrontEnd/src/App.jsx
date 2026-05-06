@@ -3,7 +3,7 @@ import ForceGraph2D from 'react-force-graph-2d';
 
 function App() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
-  const [inputText, setInputText] = useState(""); // שומר את מה שהמשתמש מקליד
+  const [inputText, setInputText] = useState(""); // Saves the data the user has entered
   const [loading, setLoading] = useState(false);
   const fgRef = useRef();
 
@@ -32,7 +32,7 @@ const handleGenerate = async () => { // Remove 'concepts' argument here
         // Now we stringify the CLEAN array, not the Event object
         body: JSON.stringify({ concepts: conceptArray }), 
       });
-      
+      // Checks the response from the API
       if (!response.ok) throw new Error("Server Error");
       
       const data = await response.json();
@@ -50,12 +50,12 @@ const handleGenerate = async () => { // Remove 'concepts' argument here
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundColor: '#000d1a', color: 'white', fontFamily: 'Arial' }}>
       
-      {/* לוח בקרה עליון */}
+      {/* The text input bar */}
       <div style={{ position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, textAlign: 'center', background: 'rgba(255, 255, 255, 0.6)', padding: '20px', borderRadius: '15px', border: '1px solid #444' }}>
         <h2>MindNet Generator</h2>
         <input 
           type="text" 
-          placeholder="הכנס מושגים מופרדים בפסיקים (למשל: Apple, Banana, Fruit)"
+          placeholder="Enter words or sentences seperated by comma (like: Banana, Apple, Orange)"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           style={{ width: '400px', padding: '10px', borderRadius: '5px', border: 'none', marginLeft: '10px' }}
@@ -65,11 +65,11 @@ const handleGenerate = async () => { // Remove 'concepts' argument here
           disabled={loading}
           style={{ padding: '10px 20px', cursor: 'pointer', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px' }}
         >
-          {loading ? "מייצר מפה..." : "צור מפה"}
+          {loading ? "creating map..." : "create map"}
         </button>
       </div>
 
-      {/* הגרף */}
+      {/* The graph */}
       {graphData.nodes.length > 0 ? (
         <ForceGraph2D
           ref={fgRef}
@@ -87,7 +87,7 @@ const handleGenerate = async () => { // Remove 'concepts' argument here
           nodeRelSize={7}
           linkDirectionalParticles={2}
           linkDirectionalParticleSpeed={0.005}
-          linkColor={() => 'rgba(255, 255, 255, 0.3)'} // לבן עם 30% שקיפות (נראה מאוד מודרני)
+          linkColor={() => 'rgba(255, 255, 255, 0.3)'} 
           linkWidth={1.5}
           nodeCanvasObject={(node, ctx, globalScale) => {
             const label = node.id;
@@ -104,7 +104,7 @@ const handleGenerate = async () => { // Remove 'concepts' argument here
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <h3>הכנס מושגים למעלה כדי להתחיל...</h3>
+          <h3>Enter words above to start...</h3>
         </div>
       )}
     </div>

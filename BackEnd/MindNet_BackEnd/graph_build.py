@@ -42,7 +42,7 @@ class GraphBuilder:
                 for j, neighbor_idx in enumerate(indices[i][1:]):
                     #This line helps find the current value and index of the array
                     #It stores the current Index in the j parameter and its value at neighbor_idx
-
+                    #indices[i]: The list of IDs for its closest friends.
                     dist = distances[i][j+1]
                     #This line gets the amount of distance between concept number i and j+1
                     if dist < THRESHOLD: # Only add edge if they are actually 'close'
