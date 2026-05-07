@@ -8,7 +8,7 @@ class ConceptClassifier(nn.Module): #this is a class for the architecture of the
 
     def __init__(self):
         super(ConceptClassifier, self).__init__() 
-        #This "wakes up" the parent nn.Module so PyTorch can track your gradients and layers.
+        #This "wakes up" the parent nn.Module so PyTorch can track the gradients and layers.
 
         self.fc1 = nn.Linear(INPUT_SIZE, HIDDEN_SIZE) 
         #This is a fully connected layer which perform the matrix multiplication y=x*A^T+b, where A are the weights the model learned during training.
@@ -58,7 +58,7 @@ class AIEngine:
 
             outputs = self.model(inputs)
             #This line is getting the output  (prediction vector) of the model set up previously. it will have a 5 dimention vector for each concept
-
+            
             _, predicted = torch.max(outputs, 1)
             #This line is getting a single prediction from the category with the highest probability from the prediction vector
 
