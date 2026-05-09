@@ -5,29 +5,32 @@ import hnswlib
 import numpy as np
 
 class MindMapAlgorithms:
-    def __init__(self, dim=384): # 384 הוא הגודל הסטנדרטי של SBERT
-        self.dim = dim
-        self.index = None
-
-    def cluster_hdbscan(self, embeddings):
-        #Cluster identification based on geometric density
+    @staticmethod
+    def get_hdbscan_clusters(embeddings):
+        # זיהוי צבירים על בסיס צפיפות (Density-based)
+        # זה מוצא קבוצות "טבעיות" במרחב הוקטורי בלי קשר לקטגוריות של ה-FFNN
         clusterer = hdbscan.HDBSCAN(min_cluster_size=2, metric='euclidean')
-        cluster_labels = clusterer.fit_predict(embeddings)
-        return cluster_labels
+        return clusterer.fit_predict(embeddings)
 
-    def detect_communities_louvain(self, nodes, edges):
-        #Identifying communities based on graph structure (Modularity)
+    @staticmethod
+    def get_louvain_communities(nodes, edges):
+        # זיהוי קהילות על בסיס מבנה הגרף (Modularity)
+        if not edges:
+            return {node['id']: 0 for node in nodes}
+            
         G = nx.Graph()
         for edge in edges:
-            G.add_edge(edge['source'], edge['target'], weight=edge['weight'])
+            G.add_edge(edge['source'], edge['target'])
         
-        partition = community_louvain.best_partition(G)
-        return partition
+        # מחזיר דירוג קהילה לכל צומת
+        return community_louvain.best_partition(G)
 
-    def build_hnsw_index(self, embeddings):
-        #Building an index for fast, real-time semantic
-        num_elements = len(embeddings)
-        self.index = hnswlib.Index(space='cosine', dim=self.dim)
-        self.index.init_index(max_elements=num_elements, ef_construction=200, M=16)
-        self.index.add_items(embeddings, np.arange(num_elements))
-        return self.index
+    @staticmethod
+    def build_fast_search(embeddings):
+        # אינדוקס HNSW לחיפוש סמנטי מהיר (O(log n))
+        dim = embeddings.shape[1]
+        num_elements = embeddings.shape[0]
+        p = hnswlib.Index(space='cosine', dim=dim)
+        p.init_index(max_elements=num_elements, ef_construction=200, M=16)
+        p.add_items(embeddings)
+        return p

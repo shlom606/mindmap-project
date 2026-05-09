@@ -1,10 +1,51 @@
 # graph_builder.py
+import numpy as np
 import networkx as nx
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import NearestNeighbors #try to implement knn myself
 from config import CATEGORY_MAP 
 #This is taking the CATEGORY_MAP parameter from the config.py file
 
 class GraphBuilder:
+    @staticmethod
+    def manual_knn(embeddings, k):
+        """
+        Custom K-Nearest Neighbors implementation using Cosine Distance.
+        Replaces sklearn's NearestNeighbors to demonstrate algorithmic understanding.
+        """
+        # Ensure embeddings is a numpy array for vector operations
+        embeddings = np.array(embeddings)
+        n_samples = embeddings.shape[0]
+        
+        # 1. Normalize vectors to unit length (L2 Norm)
+        # This allows us to calculate Cosine Similarity via Dot Product
+        norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+        # Prevent division by zero if an embedding is all zeros
+        norms[norms == 0] = 1e-9 
+        norm_embeddings = embeddings / norms
+
+        all_distances = []
+        all_indices = []
+
+        for i in range(n_samples):
+            # 2. Calculate Dot Product between current vector and all others
+            # Since vectors are normalized, dot product equals cosine similarity
+            similarities = np.dot(norm_embeddings, norm_embeddings[i])
+            
+            # 3. Convert Similarity to Distance (0.0 means identical, 1.0 means orthogonal)
+            distances = 1 - similarities
+            
+            # 4. Get indices of the K+1 smallest distances 
+            # We use K+1 because the smallest distance is always the node itself (dist=0)
+            nearest_idx = np.argsort(distances)[:k+1]
+            
+            all_indices.append(nearest_idx)
+            all_distances.append(distances[nearest_idx])
+
+        return np.array(all_distances), np.array(all_indices)
+
+
+
+
     @staticmethod
     #This is a static method cause it does not need to save data only to create the graph
 
