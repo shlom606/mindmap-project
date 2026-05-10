@@ -2,6 +2,8 @@
 import torch
 import torch.nn as nn
 from sentence_transformers import SentenceTransformer #import in order to load the SBERT model
+#import hnswlib
+import numpy as np
 from config import INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES, MODEL_PATH, DEVICE
 #Gets the parameters data from the parameter file also known as config.py
 class ConceptClassifier(nn.Module): #this is a class for the architecture of the FFNN
@@ -45,6 +47,8 @@ class AIEngine:
 
         self.model.eval()
         #This tells PyTorch to turn off Dropout and BatchNormalization because we are now using the model, not training it.
+
+        self.index = None
 
     def get_predictions(self, concepts):
         # This line generates embeddings for each of the concepts the user has given
