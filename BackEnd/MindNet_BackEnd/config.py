@@ -22,7 +22,7 @@ HIDDEN_SIZE = 128
 
 NUM_CLASSES = 5
 #The number of classes that the FFNN can output from 384 dimentions vector we get a 5 dimention vector
-MODEL_PATH = 'mindmap_model3.pth' #the path which has the trained FFNN model. the model was trained in google colab.
+MODEL_PATH = 'mindmap_FFNN.pth' #the path which has the trained FFNN model. the model was trained in google colab.
 
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'

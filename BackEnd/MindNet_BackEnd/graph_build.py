@@ -18,9 +18,13 @@ class GraphBuilder:
         
         # 1. Normalize vectors to unit length (L2 Norm)
         # This allows us to calculate Cosine Similarity via Dot Product
+        #This limit every vector from 384D into 1D keeping his direction
+        #The direction is the only thing that matters cause we use Cosine Similarity which only utilise angel
         norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+
         # Prevent division by zero if an embedding is all zeros
         norms[norms == 0] = 1e-9 
+        # Divide each vector by its length to get a unit vector (length = 1) 
         norm_embeddings = embeddings / norms
 
         all_distances = []
@@ -36,6 +40,7 @@ class GraphBuilder:
             
             # 4. Get indices of the K+1 smallest distances 
             # We use K+1 because the smallest distance is always the node itself (dist=0)
+            #It takes the K+1 distances from small to big values the smaller the
             nearest_idx = np.argsort(distances)[:k+1]
             
             all_indices.append(nearest_idx)
@@ -62,15 +67,15 @@ class GraphBuilder:
         #The algorithem looks between 3 neighbours and n_concepts-1 neighbours the -1 is to not include itself
 
         if k_neighbors > 0:# If there is more then one concept
-            knn = NearestNeighbors(n_neighbors=k_neighbors + 1, metric='cosine')
+            distances, indices = GraphBuilder.manual_knn(embeddings, k_neighbors)
             #This line executes the KNN and searches for the k_neighbors + 1  
             #The metric is for the algorithem to measure the angle between vectors 
             #If two words point in the same direction in the 384D space, they are semantically related.
 
-            knn.fit(embeddings)
+            #knn.fit(embeddings)
             #Placing all the embeddings from the SBERT model into a 384D space
 
-            distances, indices = knn.kneighbors(embeddings)
+            #distances, indices = knn.kneighbors(embeddings)
             #For every word, the algorithm looks around and finds the K closest words.
             #Then stores the indices and distances of the 384D vectors into the according lists
 
