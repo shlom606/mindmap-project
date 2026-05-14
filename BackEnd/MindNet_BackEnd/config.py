@@ -12,9 +12,14 @@ CATEGORY_MAP = {
     4: "Daily Life"
 }
 
+EMBEDDING_MODE = 'sbert'
+
+MINIBERT_PATH = 'minibert_weights.pth'
+
+
 # Model Dimensions
 #These define the topology of the FFNN neural network.
-INPUT_SIZE = 384 
+INPUT_SIZE = 8 if EMBEDDING_MODE == 'minibert' else 384
 #The exact length of a vector produced by the all-MiniLM-L6-v2 SBERT model each numerical value has a neuron represnting it
 
 HIDDEN_SIZE = 128 
