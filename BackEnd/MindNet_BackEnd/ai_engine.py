@@ -26,15 +26,23 @@ class AIEngine:
         
         if self.mode == 'sbert':
             self.embedder_model = SentenceTransformer('all-MiniLM-L6-v2')
-        elif self.mode == 'minibert':
-            # Load your saved vocabulary (crucial for consistency!)
-            # Assuming you saved your vocab list from the notebook as a json
+        # Inside AIEngine.__init__
+        if self.mode == 'minibert':
+            # Load vocabulary from the json file
             with open('vocab.json', 'r') as f:
                 vocab = json.load(f)
             
-            self.tokenizer = SimpleTokenizer(vocab)
-            self.minibert = BERT(vocab_size=len(vocab), d_model=INPUT_SIZE).to(DEVICE)
-            # Load weights from your training session
+            self.tokenizer = SimpleTokenizer(vocab, max_len=15)
+            
+            # IMPORTANT: Use the exact parameters from your training!
+            self.minibert = BERT(
+                vocab_size=len(vocab), 
+                d_model=8,      # Matches your training d_model
+                num_heads=2,    # Matches your training num_heads
+                max_len=15      # Matches your training max_len
+            ).to(DEVICE)
+            
+            # Load the weights you saved
             self.minibert.load_state_dict(torch.load('minibert_weights.pth', map_location=DEVICE))
             self.minibert.eval()
 
