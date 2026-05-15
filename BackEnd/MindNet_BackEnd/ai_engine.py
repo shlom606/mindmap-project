@@ -4,7 +4,7 @@ import torch.nn as nn
 import numpy as np
 import json
 from sentence_transformers import SentenceTransformer
-from config import INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES, MODEL_PATH, DEVICE,EMBEDDING_MODE
+from config import INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES,FFNN_PATH, DEVICE,EMBEDDING_MODE, MINIBERT_EMBEDDING_PATH
 # Import your custom architecture
 from miniBERT import BERT, SimpleTokenizer
 
@@ -26,30 +26,31 @@ class AIEngine:
         
         if self.mode == 'sbert':
             self.embedder_model = SentenceTransformer('all-MiniLM-L6-v2')
+            # Always load the final classifier
+            self.classifier = ConceptClassifier().to(DEVICE)
+            self.classifier.load_state_dict(torch.load(FFNN_PATH, map_location=DEVICE))
+            self.classifier.eval()
         # Inside AIEngine.__init__
         if self.mode == 'minibert':
-            # Load vocabulary from the json file
-            with open('vocab.json', 'r') as f:
+            # 1. Load Vocab 
+            # The tokenizer needs vocabulary to turn words to IDs
+            with open('vocab_4categories.json', 'r') as f:
                 vocab = json.load(f)
+            self.tokenizer = SimpleTokenizer(vocab)
             
-            self.tokenizer = SimpleTokenizer(vocab, max_len=15)
-            
-            # IMPORTANT: Use the exact parameters from your training!
-            self.minibert = BERT(
-                vocab_size=len(vocab), 
-                d_model=8,      # Matches your training d_model
-                num_heads=2,    # Matches your training num_heads
-                max_len=15      # Matches your training max_len
-            ).to(DEVICE)
-            
-            # Load the weights you saved
-            self.minibert.load_state_dict(torch.load('minibert_weights.pth', map_location=DEVICE))
+            # 2. Load the BERT model (The "Embedder")
+            self.minibert = BERT(vocab_size=len(vocab), d_model=8, num_heads=2).to(DEVICE)
+            # Load BERT weights here
+            self.minibert.load_state_dict(torch.load(MINIBERT_EMBEDDING_PATH, map_location=DEVICE))
             self.minibert.eval()
 
-        # Always load the final classifier
-        self.classifier = ConceptClassifier().to(DEVICE)
-        self.classifier.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
-        self.classifier.eval()
+            # 3. Load the Classifier (The "Logic")
+            self.classifier = ConceptClassifier().to(DEVICE)
+            # Load CLASSIFIER weights here (the 8-dim version you just downloaded)
+            self.classifier.load_state_dict(torch.load(FFNN_PATH, map_location=DEVICE))
+            self.classifier.eval()
+
+        
 
     def get_predictions(self, concepts):
         """Processes words and returns both coordinates (embeddings) and groups."""

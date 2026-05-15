@@ -52,18 +52,25 @@ class MultiHeadAttention(nn.Module):
         attn = F.softmax(scores, dim=-1)
         context = torch.matmul(attn, V).transpose(1, 2).contiguous().view(batch_size, -1, self.d_model)
         return self.w_o(context)
+class FeedForward(nn.Module):
+    """The FeedForward block using the exact names from your notebook."""
+    def __init__(self, d_model, d_ff):
+        super().__init__()
+        # We use 'linear1' and 'linear2' names instead of nn.Sequential
+        self.linear1 = nn.Linear(d_model, d_ff)
+        self.linear2 = nn.Linear(d_ff, d_model)
+        self.activation = nn.GELU()
+
+    def forward(self, x):
+        return self.linear2(self.activation(self.linear1(x)))
 
 class EncoderBlock(nn.Module):
-    """A single Transformer layer combining Attention and FeedForward logic."""
+    """A single Transformer layer."""
     def __init__(self, d_model, num_heads, d_ff, dropout=0.1):
         super().__init__()
         self.attention = MultiHeadAttention(d_model, num_heads)
         self.norm1 = nn.LayerNorm(d_model)
-        self.ff = nn.Sequential(
-            nn.Linear(d_model, d_ff),
-            nn.GELU(),
-            nn.Linear(d_ff, d_model)
-        )
+        self.ff = FeedForward(d_model, d_ff) # This now uses the class above
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout = nn.Dropout(dropout)
 
@@ -75,14 +82,16 @@ class EncoderBlock(nn.Module):
         return x
 
 class BERT(nn.Module):
-    """The main mini-BERT model container."""
-    def __init__(self, vocab_size, d_model=256, n_layers=4, num_heads=8, max_len=15):
+    """The full miniBERT model including the mlm_head."""
+    def __init__(self, vocab_size, d_model=8, n_layers=4, num_heads=2, max_len=15):
         super().__init__()
         self.token_emb = nn.Embedding(vocab_size, d_model)
         self.pos_emb = nn.Embedding(max_len, d_model)
         self.layers = nn.ModuleList([
             EncoderBlock(d_model, num_heads, d_model * 4) for _ in range(n_layers)
         ])
+        # We add mlm_head here because it exists in your saved .pth file
+        self.mlm_head = nn.Linear(d_model, vocab_size)
 
     def forward(self, x, mask=None):
         batch_size, seq_len = x.size()
@@ -90,4 +99,4 @@ class BERT(nn.Module):
         x = self.token_emb(x) + self.pos_emb(pos)
         for layer in self.layers:
             x = layer(x, mask)
-        return x # Return hidden states for embedding extraction
+        return x # We still return the hidden states for embeddings

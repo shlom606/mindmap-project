@@ -171,6 +171,8 @@ function App() {
           
           /* FIX: Explicitly point to the key in your JSON */
           nodeAutoColorBy="ffnn_group" 
+          //nodeAutoColorBy="hdbscan_group"
+          // nodeAutoColorBy="louvain_group"
           nodeLabel={node => getTooltipContent(node)}
           /* STYLING LINKS: Make them look professional */
           linkWidth={1.5}
