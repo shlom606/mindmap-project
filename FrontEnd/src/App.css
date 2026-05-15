@@ -1,66 +1,101 @@
-/* Container for the whole application */
+/* General Layout */
 .app-container {
-  position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #050a0f;
+  color: white;
   overflow: hidden;
+  position: relative;
 }
 
-/* The AI Classification Legend */
-.legend-container {
+/* Control Panel - Glassmorphism */
+.control-panel {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-width: 180px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
 }
 
-.legend-title {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
-
-.legend-item {
+.input-group {
   display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  transition: transform 0.2s ease;
+  gap: 10px;
+  justify-content: center;
 }
 
-.legend-item:hover {
-  transform: translateX(5px);
+.input-field {
+  background: #1a222d;
+  color: white;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 8px;
 }
 
-.legend-color-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin-right: 12px;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+.btn-generate {
+  padding: 10px 25px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #00f2fe 0%, #4facfe 100%);
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  transition: 0.3s;
 }
 
-.legend-label {
+.btn-generate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sidebar */
+.sidebar {
+  position: absolute;
+  left: 20px;
+  top: 120px;
+  width: 220px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 5;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.sidebar h4 {
+  border-bottom: 1px solid #4facfe;
+  padding-bottom: 10px;
+  color: #4facfe;
+}
+
+.map-history-item {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  transition: background 0.2s;
   font-size: 14px;
-  color: #555;
-  font-weight: 500;
+  border-bottom: 1px solid #222;
+  list-style: none;
 }
 
-/* Style for the hover tooltip (Optional customization) */
-.scene-tooltip {
-  background: #333 !important;
-  color: white !important;
-  border-radius: 4px !important;
-  padding: 8px !important;
-  font-size: 14px !important;
+.map-history-item:hover {
+  background: rgba(79, 172, 254, 0.2);
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #555;
 }

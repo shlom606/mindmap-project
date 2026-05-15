@@ -12,7 +12,7 @@ CATEGORY_MAP = {
     4: "Daily Life"
 }
 
-EMBEDDING_MODE = 'sbert'
+EMBEDDING_MODE = 'minibert'
 
 MINIBERT_EMBEDDING_PATH = 'minibert_emb_4categories.pth'
 
