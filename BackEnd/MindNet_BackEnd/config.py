@@ -16,6 +16,7 @@ EMBEDDING_MODE = 'sbert'
 
 MINIBERT_EMBEDDING_PATH = 'minibert_emb_4categories.pth'
 
+VOCAB_PATH='vocab_4categories.json'
 
 # Model Dimensions
 #These define the topology of the FFNN neural network.

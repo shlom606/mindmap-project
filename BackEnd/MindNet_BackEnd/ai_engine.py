@@ -4,7 +4,7 @@ import torch.nn as nn
 import numpy as np
 import json
 from sentence_transformers import SentenceTransformer
-from config import INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES,FFNN_PATH, DEVICE,EMBEDDING_MODE, MINIBERT_EMBEDDING_PATH
+from config import INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES,FFNN_PATH, DEVICE,EMBEDDING_MODE, MINIBERT_EMBEDDING_PATH, VOCAB_PATH
 # Import your custom architecture
 from miniBERT import BERT, SimpleTokenizer
 
@@ -34,7 +34,7 @@ class AIEngine:
         if self.mode == 'minibert':
             # 1. Load Vocab 
             # The tokenizer needs vocabulary to turn words to IDs
-            with open('vocab_4categories.json', 'r') as f:
+            with open(VOCAB_PATH, 'r') as f:
                 vocab = json.load(f)
             self.tokenizer = SimpleTokenizer(vocab)
             
