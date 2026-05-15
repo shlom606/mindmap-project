@@ -12,7 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [savedMaps, setSavedMaps] = useState([]);
   const [hoverNode, setHoverNode] = useState(null);
-
+  const [modelType, setModelType] = useState("minibert");
   useEffect(() => {
     fetchSavedMaps();
   }, []);
@@ -38,7 +38,12 @@ function App() {
       const response = await fetch("http://127.0.0.1:8000/generate-and-save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, map_title: mapTitle, concepts: conceptArray }), 
+        body: JSON.stringify({ 
+          username: username,
+          map_title: mapTitle,
+          concepts: conceptArray,
+          model_type: modelType // Send the choice to the backend
+        }), 
       });
       const result = await response.json();
       setGraphData(result.data);
@@ -58,9 +63,15 @@ function App() {
   return (
     <div className="app-container">
       <ControlPanel 
-        mapTitle={mapTitle} setMapTitle={setMapTitle}
-        inputText={inputText} setInputText={setInputText}
-        onGenerate={handleGenerateAndSave} loading={loading}
+        mapTitle={mapTitle} 
+      setMapTitle={setMapTitle}
+      inputText={inputText} 
+      setInputText={setInputText}
+      onGenerate={handleGenerateAndSave} 
+      loading={loading}
+      
+      modelType={modelType}
+      setModelType={setModelType}
       />
 
       <Sidebar savedMaps={savedMaps} onLoadMap={loadSpecificMap} />

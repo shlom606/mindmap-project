@@ -10,44 +10,44 @@ from miniBERT import BERT, SimpleTokenizer
 
 class ConceptClassifier(nn.Module):
     """FFNN to classify the embeddings into 5 categories."""
-    def __init__(self):
+    def __init__(self,input_size,num_classes):
         super(ConceptClassifier, self).__init__()
-        self.fc1 = nn.Linear(INPUT_SIZE, HIDDEN_SIZE)
+        self.fc1 = nn.Linear(input_size, HIDDEN_SIZE)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(0.2)
-        self.fc2 = nn.Linear(HIDDEN_SIZE, NUM_CLASSES)
+        self.fc2 = nn.Linear(HIDDEN_SIZE, num_classes)
 
     def forward(self, x):
         return self.fc2(self.dropout(self.relu(self.fc1(x))))
-
 class AIEngine:
-    def __init__(self, mode=EMBEDDING_MODE):
+    def __init__(self, mode='minibert'):
         self.mode = mode
         
         if self.mode == 'sbert':
+            # SBERT Specs
+            input_size = 384 
+            ffnn_path = 'SBERT_FFNN_Clasifier.pth'
             self.embedder_model = SentenceTransformer('all-MiniLM-L6-v2')
-            # Always load the final classifier
-            self.classifier = ConceptClassifier().to(DEVICE)
-            self.classifier.load_state_dict(torch.load(FFNN_PATH, map_location=DEVICE))
+            
+            self.classifier = ConceptClassifier(input_size, 5).to(DEVICE) # Use 5 classes for SBERT
+            self.classifier.load_state_dict(torch.load(ffnn_path, map_location=DEVICE))
             self.classifier.eval()
-        # Inside AIEngine.__init__
+
         if self.mode == 'minibert':
-            # 1. Load Vocab 
-            # The tokenizer needs vocabulary to turn words to IDs
+            # miniBERT Specs
+            input_size = 8
+            ffnn_path = 'miniBERT_FFNN_classifier_4categories.pth'
+            
             with open(VOCAB_PATH, 'r') as f:
                 vocab = json.load(f)
             self.tokenizer = SimpleTokenizer(vocab)
             
-            # 2. Load the BERT model (The "Embedder")
             self.minibert = BERT(vocab_size=len(vocab), d_model=8, num_heads=2).to(DEVICE)
-            # Load BERT weights here
             self.minibert.load_state_dict(torch.load(MINIBERT_EMBEDDING_PATH, map_location=DEVICE))
             self.minibert.eval()
 
-            # 3. Load the Classifier (The "Logic")
-            self.classifier = ConceptClassifier().to(DEVICE)
-            # Load CLASSIFIER weights here (the 8-dim version you just downloaded)
-            self.classifier.load_state_dict(torch.load(FFNN_PATH, map_location=DEVICE))
+            self.classifier = ConceptClassifier(input_size, 4).to(DEVICE) # Use 4 classes for miniBERT
+            self.classifier.load_state_dict(torch.load(ffnn_path, map_location=DEVICE))
             self.classifier.eval()
 
         
