@@ -45,6 +45,7 @@ class AIEngine:
             
             self.minibert = BERT(vocab_size=len(vocab), d_model=8, num_heads=2).to(DEVICE)
             self.minibert.load_state_dict(torch.load(MINIBERT_EMBEDDING_PATH, map_location=DEVICE))
+            self.minibert.eval()
             
             self.classifier = ConceptClassifier(input_size, num_classes).to(DEVICE)
             self.classifier.load_state_dict(torch.load(model_path, map_location=DEVICE))
@@ -58,12 +59,13 @@ class AIEngine:
         if self.mode == 'sbert':
             embeddings = self.embedder_model.encode(concepts)
         else:
+            self.minibert.eval()
             embeddings = []
             for text in concepts:
                 ids = torch.tensor([self.tokenizer.encode(text)]).to(DEVICE)
                 with torch.no_grad():
                     # Extract the [CLS] token vector as the concept's embedding
-                    states = self.minibert(ids)
+                    states = self.minibert(ids) 
                     embeddings.append(states[0, 0, :].cpu().numpy())
             embeddings = np.array(embeddings)
         
