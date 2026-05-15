@@ -4,6 +4,20 @@ import hdbscan
 import community as community_louvain # The Louvain library
 from config import CATEGORY_MAP 
 
+SBERT_MAP = {
+        0: "Technology & Science",
+        1: "History & Society",
+        2: "Nature & Biology",
+        3: "Arts & Culture",
+        4: "Daily Life"
+    }
+
+MINIBERT_MAP = {
+        0: "Fruit",
+        1: "Machine Learning",
+        2: "History",
+        3: "Daily Life"
+    }
 class GraphBuilder:
     @staticmethod
     def manual_knn(embeddings, k):
@@ -38,7 +52,7 @@ class GraphBuilder:
         return np.array(all_distances), np.array(all_indices)
 
     @staticmethod
-    def create_structure(concepts, embeddings, group_ids):
+    def create_structure(concepts, embeddings, group_ids, mode='minibert'):
         """
         Builds the mind map structure using KNN for edges, 
         HDBSCAN for spatial clusters, and Louvain for graph communities.
@@ -77,13 +91,14 @@ class GraphBuilder:
         # --- STEP 4: Positioning and Node Metadata ---
         pos = nx.spring_layout(G, k=0.15, iterations=50)
         nodes = []
+        current_map = SBERT_MAP if mode == 'sbert' else MINIBERT_MAP
         for i, concept in enumerate(concepts):
             nodes.append({
                 "id": concept, 
                 "ffnn_group": group_ids[i], # Prediction from your Neural Network[cite: 4]
                 "hdbscan_group": int(hdbscan_labels[i]), # Grouping by spatial density
                 "louvain_group": louvain_partition.get(concept, 0), # Grouping by graph connectivity[cite: 1]
-                "category": CATEGORY_MAP.get(group_ids[i], "Unknown"),
+                "category": current_map.get(group_ids[i], "Unknown"),
                 "x": float(pos.get(concept, [0,0])[0] * 1000),
                 "y": float(pos.get(concept, [0,0])[1] * 1000)
             })

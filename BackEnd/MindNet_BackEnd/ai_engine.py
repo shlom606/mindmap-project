@@ -20,7 +20,7 @@ class ConceptClassifier(nn.Module):
     def forward(self, x):
         return self.fc2(self.dropout(self.relu(self.fc1(x))))
 class AIEngine:
-    def __init__(self, mode='sbert'):
+    def __init__(self, mode='minibert'):
         self.mode = mode
         
         if self.mode == 'sbert':

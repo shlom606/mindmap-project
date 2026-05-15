@@ -44,10 +44,19 @@ async def generate(data: ConceptRequest):
 async def generate_and_save(request: MapGenerationRequest):
     try:
         selected_engine = engines.get(request.model_type, engines['minibert'])
-        embeddings, groups = selected_engine.get_predictions(request.concepts)
-        graph_data = builder.create_structure(request.concepts, embeddings, groups)
         
-        # This call now handles the missing user check
+        # 1. AI Processing
+        embeddings, groups = selected_engine.get_predictions(request.concepts)
+        
+        # 2. Graph Construction - PASS THE MODE HERE
+        graph_data = builder.create_structure(
+            request.concepts, 
+            embeddings, 
+            groups, 
+            mode=request.model_type # This tells the builder which map to use
+        )
+        
+        # 3. Data Persistence
         map_id = db.save_user_map(request.username, request.map_title, graph_data)
         
         return {
@@ -55,12 +64,8 @@ async def generate_and_save(request: MapGenerationRequest):
             "data": graph_data,
             "map_id": map_id
         }
-    except ValueError as ve:
-        # Catch the "User not found" error specifically
-        raise HTTPException(status_code=401, detail=str(ve))
     except Exception as e:
-        print(f"CRITICAL ERROR: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/my-maps/{username}")
 async def get_user_maps(username: str):
