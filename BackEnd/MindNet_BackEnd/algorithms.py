@@ -1,36 +1,101 @@
-import hdbscan
-import community.community_louvain as community_louvain
-import networkx as nx
-import hnswlib
+# algorithms.py
 import numpy as np
+import networkx as nx
 
-class MindMapAlgorithms:
-    @staticmethod
-    def get_hdbscan_clusters(embeddings):
-        # זיהוי צבירים על בסיס צפיפות (Density-based)
-        # זה מוצא קבוצות "טבעיות" במרחב הוקטורי בלי קשר לקטגוריות של ה-FFNN
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=2, metric='euclidean')
-        return clusterer.fit_predict(embeddings)
+def manual_knn(embeddings, k):
+    """White box KNN logic using Cosine Distance."""
+    embeddings = np.array(embeddings)
+    n_samples = embeddings.shape[0]
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+    norms[norms == 0] = 1e-9 
+    norm_embeddings = embeddings / norms
+    all_distances, all_indices = [], []
 
-    @staticmethod
-    def get_louvain_communities(nodes, edges):
-        # זיהוי קהילות על בסיס מבנה הגרף (Modularity)
-        if not edges:
-            return {node['id']: 0 for node in nodes}
-            
-        G = nx.Graph()
-        for edge in edges:
-            G.add_edge(edge['source'], edge['target'])
+    for i in range(n_samples):
+        similarities = np.dot(norm_embeddings, norm_embeddings[i])
+        distances = 1 - similarities
+        nearest_idx = np.argsort(distances)[:k+1]
+        all_indices.append(nearest_idx)
+        all_distances.append(distances[nearest_idx])
+    return np.array(all_distances), np.array(all_indices)
+
+
+def white_box_density_cluster(embeddings, eps=0.6, min_samples=2):
+    """
+    White box density-based clustering.
+    Replaces HDBSCAN. Uses a DBSCAN-style neighborhood expansion.
+    """
+    n = len(embeddings)
+    labels = -1 * np.ones(n) # -1 indicates noise
+    cluster_id = 0
+    
+    # Calculate Euclidean distance matrix
+    diff = embeddings[:, np.newaxis, :] - embeddings[np.newaxis, :, :]
+    dist_matrix = np.linalg.norm(diff, axis=2)
+    
+    for i in range(n):
+        if labels[i] != -1: continue # Skip if already clustered
         
-        # מחזיר דירוג קהילה לכל צומת
-        return community_louvain.best_partition(G)
+        neighbors = np.where(dist_matrix[i] < eps)[0]
+        if len(neighbors) < min_samples: continue
+        
+        # Expand cluster
+        labels[i] = cluster_id
+        queue = list(neighbors)
+        while queue:
+            neighbor_idx = queue.pop(0)
+            if labels[neighbor_idx] == -1: # Unvisited / Noise
+                labels[neighbor_idx] = cluster_id
+                new_neighbors = np.where(dist_matrix[neighbor_idx] < eps)[0]
+                if len(new_neighbors) >= min_samples:
+                    queue.extend([nn for nn in new_neighbors if labels[nn] == -1])
+        cluster_id += 1
+        
+    return labels.astype(int)
 
-    @staticmethod
-    def build_fast_search(embeddings):
-        # אינדוקס HNSW לחיפוש סמנטי מהיר (O(log n))
-        dim = embeddings.shape[1]
-        num_elements = embeddings.shape[0]
-        p = hnswlib.Index(space='cosine', dim=dim)
-        p.init_index(max_elements=num_elements, ef_construction=200, M=16)
-        p.add_items(embeddings)
-        return p
+
+def white_box_modularity_community(G):
+    """
+    White box Greedy Modularity Community Detection.
+    Replaces python-louvain. Iteratively merges nodes to maximize graph modularity.
+    """
+    if G.number_of_nodes() == 0: return {}
+    
+    # Start with each node in its own community
+    partition = {node: i for i, node in enumerate(G.nodes())}
+    m = G.size(weight='weight')
+    if m == 0: return {node: 0 for node in G.nodes()}
+
+    def get_modularity(curr_partition):
+        """Calculates the modularity score Q of the current partition."""
+        q = 0
+        for community in set(curr_partition.values()):
+            nodes_in_comm = [n for n, c in curr_partition.items() if c == community]
+            subgraph = G.subgraph(nodes_in_comm)
+            lc = subgraph.size(weight='weight') # Internal edges
+            dc = sum(dict(G.degree(nodes_in_comm, weight='weight')).values()) # Total edges
+            q += (lc / m) - (dc / (2 * m))**2
+        return q
+
+    improved = True
+    while improved:
+        improved = False
+        for node in G.nodes():
+            old_comm = partition[node]
+            best_q = get_modularity(partition)
+            
+            # Test moving node to neighbor's communities
+            for neighbor in G.neighbors(node):
+                new_comm = partition[neighbor]
+                if new_comm == old_comm: continue
+                
+                partition[node] = new_comm
+                new_q = get_modularity(partition)
+                
+                if new_q > best_q:
+                    best_q = new_q
+                    improved = True
+                else:
+                    partition[node] = old_comm # Revert change if it didn't improve Q
+                    
+    return partition
