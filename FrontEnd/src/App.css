@@ -99,3 +99,19 @@
   height: 100%;
   color: #555;
 }
+.graph-container-expanded {
+  flex-grow: 1; 
+  height: 100%;
+  position: relative;
+}
+.control-sidebar-column {
+  width: 340px;
+  min-width: 340px;
+  height: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: #13131a;
+  border-right: 1px solid #23232f;
+}
