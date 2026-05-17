@@ -1,15 +1,17 @@
+// src/components/GraphView.jsx
 import React, { useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 
-const GraphView = ({ graphData, hoverNode, setHoverNode }) => {
+const GraphView = ({ graphData, hoverNode, setHoverNode, colorMode }) => {
   
   const getTooltipContent = (node) => `
-    <div style="background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif; color: #333; direction: rtl;">
+    <div style="background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif; color: #333; text-align: left;">
       <strong style="font-size: 1.1em; color: #2c3e50;">${node.id}</strong>
       <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;" />
-      <div style="text-align: left; direction: ltr; font-size: 0.85em;">
-        <div><b>Category:</b> ${node.category}</div>
-        <div><b>Group:</b> ${node.ffnn_group}</div>
+      <div style="font-size: 0.85em;">
+        <div><b>Category (FFNN):</b> ${node.category} (Group ${node.ffnn_group})</div>
+        <div><b>Density Group (HDBSCAN):</b> ${node.hdbscan_group === -1 ? 'Noise (Unclustered)' : `Cluster ${node.hdbscan_group}`}</div>
+        <div><b>Community (Louvain):</b> Community ${node.louvain_group}</div>
       </div>
     </div>
   `;
@@ -18,6 +20,9 @@ const GraphView = ({ graphData, hoverNode, setHoverNode }) => {
     const isHovered = node === hoverNode;
     const label = node.id;
     const fontSize = isHovered ? 16 / globalScale : 12 / globalScale;
+    
+    // CRITICAL FIX: node.color is auto-populated by ForceGraph2D 
+    // based on whatever property name is assigned to nodeAutoColorBy!
     const nodeColor = node.color || '#4facfe'; 
 
     ctx.beginPath();
@@ -35,7 +40,10 @@ const GraphView = ({ graphData, hoverNode, setHoverNode }) => {
   return (
     <ForceGraph2D
       graphData={graphData}
-      nodeAutoColorBy="ffnn_group"
+      
+      // DYNAMIC LAYER BINDING: Tells the graph which database key determines node color
+      nodeAutoColorBy={colorMode} 
+      
       nodeLabel={getTooltipContent}
       linkWidth={1.5}
       linkColor={() => '#d3d3d3'}

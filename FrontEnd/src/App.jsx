@@ -15,7 +15,7 @@ function App() {
   const [savedMaps, setSavedMaps] = useState([]);
   const [hoverNode, setHoverNode] = useState(null);
   const [modelType, setModelType] = useState("minibert");
-  
+  const [colorMode, setColorMode] = useState('ffnn_group');
   useEffect(() => {
     if (user) fetchSavedMaps();
   }, [user]);
@@ -131,6 +131,7 @@ function App() {
       
       modelType={modelType}
       setModelType={setModelType}
+      colorMode={colorMode} setColorMode={setColorMode} // <-- ADDED PROPS
       />
 
       <Sidebar savedMaps={savedMaps} 
@@ -142,6 +143,7 @@ function App() {
           graphData={graphData} 
           hoverNode={hoverNode} 
           setHoverNode={setHoverNode} 
+          colorMode={colorMode} // <-- PASS COLOR MODE DOWN TO GRAPH
         />
       ) : (
         <div className="empty-state">

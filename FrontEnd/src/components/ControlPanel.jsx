@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ControlPanel = ({ mapTitle, setMapTitle, inputText, setInputText, modelType, setModelType, onGenerate, loading }) => {
+const ControlPanel = ({ mapTitle, setMapTitle, inputText, setInputText, modelType, setModelType, onGenerate, loading,colorMode, setColorMode }) => {
   return (
     <div className="control-panel">
       <h2 style={{ margin: '0 0 15px 0', letterSpacing: '1px', color: '#4facfe' }}>MindNet Explorer</h2>
@@ -14,6 +14,18 @@ const ControlPanel = ({ mapTitle, setMapTitle, inputText, setInputText, modelTyp
         >
           <option value="minibert">Model: miniBERT (8-dim)</option>
           <option value="sbert">Model: SBERT (384-dim)</option>
+        </select>
+
+        {/* NEW DROPDOWN: Visual Layer Selection */}
+        <select 
+          value={colorMode} 
+          onChange={(e) => setColorMode(e.target.value)}
+          className="input-field"
+          style={{ border: '1px solid #00f2fe', color: '#00f2fe' }} // Colored border to highlight it
+        >
+          <option value="ffnn_group">Color By: AI Categories (FFNN)</option>
+          <option value="hdbscan_group">Color By: Density Clusters (HDBSCAN)</option>
+          <option value="louvain_group">Color By: Graph Communities (Louvain)</option>
         </select>
 
         <input 
