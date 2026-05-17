@@ -3,6 +3,7 @@ import ControlPanel from './components/ControlPanel.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import GraphView from './components/GraphView.jsx';
 import Auth from './components/Auth.jsx';
+import SearchBar from './components/SearchBar';
 import './App.css';
 
 function App() {
@@ -117,6 +118,18 @@ function App() {
     }
   };
 
+  const handleHNSWResult = (conceptName) => {
+    // מחפשים את האובייקט המלא של הצומת מתוך הנתונים הקיימים בגרף
+    const foundNode = graphData.nodes.find(node => node.id === conceptName);
+    if (foundNode) {
+      setHoverNode(foundNode); // הופך אותו למודגש (מפעיל את ה-drawNode הגדול יותר ב-GraphView)
+      
+      // אופציונלי: אם יש לך גישה ל-fgRef של הגרף, תוכל לעשות אליו Zoom-in חלק:
+      // fgRef.current.centerAt(foundNode.x, foundNode.y, 1000);
+    }
+  };
+
+
   return (
     <div className="app-container">
       <button onClick={handleLogout} style={styles.logoutBtn}>Logout ({user})</button>
@@ -134,9 +147,14 @@ function App() {
       colorMode={colorMode} setColorMode={setColorMode} // <-- ADDED PROPS
       />
 
-      <Sidebar savedMaps={savedMaps} 
+      {/* <Sidebar savedMaps={savedMaps} 
       onLoadMap={loadSpecificMap} 
-      onDeleteMap={handleDeleteMap} />
+      onDeleteMap={handleDeleteMap} /> */}
+
+      <div style={{ width: '300px', padding: '0 10px' }}>
+        <SearchBar onNodeFound={handleHNSWResult} />
+        <Sidebar savedMaps={savedMaps} onLoadMap={loadSpecificMap} onDeleteMap={handleDeleteMap} />
+      </div>
       
       {graphData && graphData.nodes && graphData.nodes.length > 0 ? (
         <GraphView 
