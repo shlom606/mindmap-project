@@ -15,6 +15,7 @@ function App() {
   const [savedMaps, setSavedMaps] = useState([]);
   const [hoverNode, setHoverNode] = useState(null);
   const [modelType, setModelType] = useState("minibert");
+  
   useEffect(() => {
     if (user) fetchSavedMaps();
   }, [user]);

@@ -12,7 +12,7 @@ app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # Initialize our specialized modules
-engine = AIEngine() #this from ai_engine.py
+#engine = AIEngine() #this from ai_engine.py
 builder = GraphBuilder() #this is from graph_build.py
 db = MindMapStorage()
 
@@ -22,7 +22,7 @@ class MapGenerationRequest(BaseModel):
     username: str
     map_title: str
     concepts: list[str]
-    model_type: Literal['sbert', 'minibert'] = 'minibert' # Add this field
+    model_type: str # Add this field
 class UserAuth(BaseModel):
     username: str
     password: str
@@ -31,40 +31,47 @@ engines = {
     'sbert': AIEngine(mode='sbert'),
     'minibert': AIEngine(mode='minibert')
 }
-@app.post("/generate")
-async def generate(data: ConceptRequest):
-    # Step 1: AI processes the text
-    embeddings, groups = engine.get_predictions(data.concepts)
+# @app.post("/generate")
+# async def generate(data: ConceptRequest):
+#     # Step 1: AI processes the text
+#     embeddings, groups = engine.get_predictions(data.concepts)
     
-    # Step 2: Architect builds the graph
-    graph_data = builder.create_structure(data.concepts, embeddings, groups)
+#     # Step 2: Architect builds the graph
+#     graph_data = builder.create_structure(data.concepts, embeddings, groups)
     
-    return graph_data
+#     return graph_data
 @app.post("/generate-and-save")
 async def generate_and_save(request: MapGenerationRequest):
+    # 1. THE TRACKER: Watch your Python terminal when you click generate!
+    print("\n--- NEW GENERATION REQUEST ---")
+    print(f"Words: {request.concepts}")
+    print(f"Model Requested by React: '{request.model_type}'")
+    
     try:
-        selected_engine = engines.get(request.model_type, engines['minibert'])
-        
-        # 1. AI Processing
+        # 2. Strict selection
+        selected_engine = engines.get(request.model_type)
+        if not selected_engine:
+            print(f"CRITICAL: '{request.model_type}' not found! Using fallback.")
+            selected_engine = engines.get('minibert')
+            
         embeddings, groups = selected_engine.get_predictions(request.concepts)
         
-        # 2. Graph Construction - PASS THE MODE HERE
         graph_data = builder.create_structure(
             request.concepts, 
             embeddings, 
             groups, 
-            mode=request.model_type # This tells the builder which map to use
+            mode=request.model_type
         )
         
-        # 3. Data Persistence
         map_id = db.save_user_map(request.username, request.map_title, graph_data)
-        
+        print("--- SUCCESS ---")
         return {
             "status": "success",
             "data": graph_data,
             "map_id": map_id
         }
     except Exception as e:
+        print(f"--- CRASH: {str(e)} ---") # This prints the exact error!
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/my-maps/{username}")

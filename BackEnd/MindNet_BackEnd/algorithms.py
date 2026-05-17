@@ -80,15 +80,18 @@ def white_box_modularity_community(G):
             dc = sum(dict(G.degree(nodes_in_comm, weight='weight')).values()) # Total edges
             q += (lc / m) - (dc / (2 * m))**2
         return q
-
     improved = True
-    while improved:
+    max_iterations = 20 # SAFETY VALVE: Force it to stop after 20 rounds
+    current_iter = 0
+    
+    while improved and current_iter < max_iterations:
         improved = False
+        current_iter += 1
+        
         for node in G.nodes():
             old_comm = partition[node]
             best_q = get_modularity(partition)
             
-            # Test moving node to neighbor's communities
             for neighbor in G.neighbors(node):
                 new_comm = partition[neighbor]
                 if new_comm == old_comm: continue
@@ -96,10 +99,11 @@ def white_box_modularity_community(G):
                 partition[node] = new_comm
                 new_q = get_modularity(partition)
                 
-                if new_q > best_q:
+                # Check for meaningful improvement (avoids float ping-pong)
+                if new_q > best_q + 1e-7: 
                     best_q = new_q
                     improved = True
                 else:
-                    partition[node] = old_comm # Revert change if it didn't improve Q
+                    partition[node] = old_comm # Revert
                     
     return partition

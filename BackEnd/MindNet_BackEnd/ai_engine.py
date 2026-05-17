@@ -58,7 +58,7 @@ class AIEngine:
         """Processes words and returns both coordinates (embeddings) and groups."""
         if self.mode == 'sbert':
             embeddings = self.embedder_model.encode(concepts)
-        else:
+        elif self.mode == 'minibert':
             self.minibert.eval()
             embeddings = []
             for text in concepts:
