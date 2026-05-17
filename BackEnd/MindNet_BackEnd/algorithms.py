@@ -20,21 +20,25 @@ def manual_knn(embeddings, k):
     return np.array(all_distances), np.array(all_indices)
 
 
+
 def white_box_density_cluster(embeddings, eps=0.6, min_samples=2):
     """
     White box density-based clustering.
     Replaces HDBSCAN. Uses a DBSCAN-style neighborhood expansion.
     """
+    # ADD THIS LINE: Convert Python list to a Numpy array first!
+    embeddings = np.array(embeddings) 
+    
     n = len(embeddings)
     labels = -1 * np.ones(n) # -1 indicates noise
     cluster_id = 0
     
-    # Calculate Euclidean distance matrix
+    # Calculate Euclidean distance matrix (This is what was crashing)
     diff = embeddings[:, np.newaxis, :] - embeddings[np.newaxis, :, :]
     dist_matrix = np.linalg.norm(diff, axis=2)
     
     for i in range(n):
-        if labels[i] != -1: continue # Skip if already clustered
+        if labels[i] != -1: continue 
         
         neighbors = np.where(dist_matrix[i] < eps)[0]
         if len(neighbors) < min_samples: continue
@@ -44,7 +48,7 @@ def white_box_density_cluster(embeddings, eps=0.6, min_samples=2):
         queue = list(neighbors)
         while queue:
             neighbor_idx = queue.pop(0)
-            if labels[neighbor_idx] == -1: # Unvisited / Noise
+            if labels[neighbor_idx] == -1: 
                 labels[neighbor_idx] = cluster_id
                 new_neighbors = np.where(dist_matrix[neighbor_idx] < eps)[0]
                 if len(new_neighbors) >= min_samples:

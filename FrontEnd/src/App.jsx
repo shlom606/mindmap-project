@@ -61,6 +61,9 @@ function App() {
           model_type: modelType // Send the choice to the backend
         }), 
       });
+      if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
       const result = await response.json();
       setGraphData(result.data);
       fetchSavedMaps();
